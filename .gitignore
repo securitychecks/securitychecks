@@ -1,5 +1,7 @@
 node_modules
 dist
+.securitychecks
+*.tsbuildinfo
 .turbo
 .pnpm-store
 .DS_Store
