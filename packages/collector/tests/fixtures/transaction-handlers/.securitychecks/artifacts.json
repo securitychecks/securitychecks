@@ -1,0 +1,90 @@
+{
+  "version": "1.0",
+  "schemaVersion": "1.1.0",
+  "profile": "securitychecks",
+  "extractedAt": "2026-01-02T22:17:40.364Z",
+  "codebase": {
+    "root": "/home/ripcut/Projects/securitychecks.ai/packages/collector/tests/fixtures/transaction-handlers",
+    "filesScanned": 0,
+    "languages": []
+  },
+  "services": [],
+  "authzCalls": [],
+  "cacheOperations": [],
+  "transactionScopes": [],
+  "webhookHandlers": [],
+  "jobHandlers": [],
+  "membershipMutations": [],
+  "tests": [
+    {
+      "file": "complete-outbox.test.ts",
+      "line": 14,
+      "name": "should not send email on rollback",
+      "type": "unit",
+      "describes": [
+        "createOrderWithOutbox transaction safety"
+      ],
+      "assertions": [
+        {
+          "line": 24,
+          "type": "unknown",
+          "isPermissive": false
+        },
+        {
+          "line": 34,
+          "type": "unknown",
+          "isPermissive": false
+        }
+      ],
+      "antiPatterns": []
+    },
+    {
+      "file": "complete-outbox.test.ts",
+      "line": 37,
+      "name": "should create outbox entry only after successful commit",
+      "type": "unit",
+      "describes": [
+        "createOrderWithOutbox transaction safety"
+      ],
+      "assertions": [
+        {
+          "line": 47,
+          "type": "unknown",
+          "isPermissive": false
+        },
+        {
+          "line": 48,
+          "type": "unknown",
+          "isPermissive": false
+        }
+      ],
+      "antiPatterns": []
+    },
+    {
+      "file": "complete-outbox.test.ts",
+      "line": 57,
+      "name": "should handle duplicate idempotent requests",
+      "type": "unit",
+      "describes": [
+        "createOrderWithOutbox transaction safety"
+      ],
+      "assertions": [
+        {
+          "line": 74,
+          "type": "unknown",
+          "isPermissive": false
+        },
+        {
+          "line": 75,
+          "type": "unknown",
+          "isPermissive": false
+        }
+      ],
+      "antiPatterns": []
+    }
+  ],
+  "routes": [],
+  "callGraph": {
+    "nodes": []
+  }
+}

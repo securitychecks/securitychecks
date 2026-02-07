@@ -1,0 +1,148 @@
+{
+  "version": "1.0",
+  "schemaVersion": "1.1.0",
+  "profile": "securitychecks",
+  "extractedAt": "2026-01-06T07:59:00.971Z",
+  "codebase": {
+    "root": "/home/wavecutter/IdeaProjects/securitychecks/packages/collector/test-fixtures/AUTHZ.RLS.MULTI_TENANT/false-positive",
+    "filesScanned": 0,
+    "languages": []
+  },
+  "services": [],
+  "authzCalls": [],
+  "cacheOperations": [],
+  "transactionScopes": [],
+  "webhookHandlers": [],
+  "jobHandlers": [],
+  "membershipMutations": [],
+  "tests": [],
+  "routes": [],
+  "callGraph": {
+    "nodes": [
+      {
+        "file": "src/projects.ts",
+        "line": 6,
+        "functionName": "getAllProjects",
+        "calls": [
+          {
+            "targetFunction": "findMany",
+            "line": 7
+          }
+        ]
+      },
+      {
+        "file": "src/projects.ts",
+        "line": 11,
+        "functionName": "getProjectById",
+        "calls": [
+          {
+            "targetFunction": "findUnique",
+            "line": 12
+          }
+        ]
+      },
+      {
+        "file": "src/projects.ts",
+        "line": 18,
+        "functionName": "getProjectTasks",
+        "calls": [
+          {
+            "targetFunction": "findMany",
+            "line": 19
+          }
+        ]
+      }
+    ]
+  },
+  "rlsArtifact": {
+    "multiTenantTables": [
+      {
+        "file": "prisma/schema.prisma",
+        "line": 22,
+        "table": "Project",
+        "tenantColumn": "organizationId",
+        "tenantPattern": "organization",
+        "hasRLSPolicy": true,
+        "hasQueryFiltering": false,
+        "relatedTables": [
+          "Organization"
+        ],
+        "framework": "prisma"
+      },
+      {
+        "file": "prisma/schema.prisma",
+        "line": 42,
+        "table": "Member",
+        "tenantColumn": "organizationId",
+        "tenantPattern": "organization",
+        "hasRLSPolicy": true,
+        "hasQueryFiltering": false,
+        "relatedTables": [
+          "Organization"
+        ],
+        "framework": "prisma"
+      }
+    ],
+    "rlsPolicies": [
+      {
+        "file": "prisma/migrations/20240101000000_add_rls/migration.sql",
+        "line": 14,
+        "table": "Project",
+        "policyName": "project_tenant_isolation",
+        "policyType": "both",
+        "tenantColumn": "organizationId",
+        "usesSessionContext": false
+      },
+      {
+        "file": "prisma/migrations/20240101000000_add_rls/migration.sql",
+        "line": 21,
+        "table": "Member",
+        "policyName": "member_tenant_isolation",
+        "policyType": "both",
+        "tenantColumn": "organizationId",
+        "usesSessionContext": false
+      },
+      {
+        "file": "prisma/migrations/20240101000000_add_rls/migration.sql",
+        "line": 28,
+        "table": "Task",
+        "policyName": "task_tenant_isolation",
+        "policyType": "using",
+        "tenantColumn": "organizationId",
+        "usesSessionContext": false
+      }
+    ],
+    "queries": [
+      {
+        "file": "src/projects.ts",
+        "line": 7,
+        "table": "project",
+        "operation": "select",
+        "hasTenantFilter": false,
+        "containingFunction": "getAllProjects",
+        "framework": "prisma"
+      },
+      {
+        "file": "src/projects.ts",
+        "line": 12,
+        "table": "project",
+        "operation": "select",
+        "hasTenantFilter": false,
+        "containingFunction": "getProjectById",
+        "framework": "prisma"
+      },
+      {
+        "file": "src/projects.ts",
+        "line": 19,
+        "table": "task",
+        "operation": "select",
+        "hasTenantFilter": false,
+        "containingFunction": "getProjectTasks",
+        "framework": "prisma"
+      }
+    ],
+    "framework": "prisma",
+    "usesSupabase": false,
+    "hasRLSContextHelper": false
+  }
+}

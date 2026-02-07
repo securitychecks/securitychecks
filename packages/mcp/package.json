@@ -1,0 +1,55 @@
+{
+  "name": "@securitychecks/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for SecurityChecks - expose scheck tools to AI assistants",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "SecurityChecks <hello@securitychecks.ai>",
+  "homepage": "https://securitychecks.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/securitychecks/securitychecks.ai"
+  },
+  "keywords": [
+    "scheck",
+    "securitychecks",
+    "mcp",
+    "model-context-protocol",
+    "llm",
+    "claude",
+    "ai-assistant",
+    "code-review",
+    "cursor",
+    "anthropic"
+  ],
+  "bin": {
+    "scheck-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@securitychecks/cli": "workspace:*",
+    "@securitychecks/collector": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

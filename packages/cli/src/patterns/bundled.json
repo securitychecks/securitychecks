@@ -1,0 +1,1364 @@
+[
+  {
+    "id": "secrets.aws-access-key-id",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "AWS Access Key ID",
+    "description": "AWS access key ID found in code. These start with AKIA and are 20 chars.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/AKIA[0-9A-Z]{16}/",
+          "not": ["process.env", "import.meta.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "xxx", "placeholder", "changeme"]
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "AWS Access Key ID found in code",
+      "requiredProof": "Move to environment variable or AWS Secrets Manager",
+      "references": ["https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html"],
+      "tags": ["aws", "secrets", "credentials"]
+    },
+    "metadata": {
+      "author": "SecurityChecks",
+      "created": "2025-01-01T00:00:00Z",
+      "references": ["https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html"]
+    }
+  },
+  {
+    "id": "secrets.aws-secret-access-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "AWS Secret Access Key",
+    "description": "AWS secret access key found in code.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/aws_secret_access_key\\s*[=:]\\s*[\"'][A-Za-z0-9/+=]{40}[\"']/",
+          "not": ["process.env", "import.meta.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"]
+        },
+        {
+          "pattern": "/AWS_SECRET_ACCESS_KEY\\s*[=:]\\s*[\"'][A-Za-z0-9/+=]{40}[\"']/",
+          "not": ["process.env"]
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "AWS Secret Access Key found in code",
+      "requiredProof": "Remove from code, rotate key immediately",
+      "references": ["https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html"],
+      "tags": ["aws", "secrets", "credentials"]
+    },
+    "metadata": {
+      "author": "SecurityChecks",
+      "created": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "id": "secrets.github-personal-access-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "GitHub Personal Access Token",
+    "description": "GitHub PAT found in code. Starts with ghp_ (classic) or github_pat_.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/ghp_[A-Za-z0-9]{36}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] },
+        { "pattern": "/github_pat_[A-Za-z0-9]{22}_[A-Za-z0-9]{59}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "GitHub Personal Access Token found in code",
+      "requiredProof": "Remove and rotate token immediately",
+      "references": ["https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"],
+      "tags": ["github", "secrets", "token"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.github-oauth-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "GitHub OAuth Token",
+    "description": "GitHub OAuth access token. Starts with gho_.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/gho_[A-Za-z0-9]{36}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "GitHub OAuth Token found in code",
+      "requiredProof": "Remove and rotate token",
+      "references": ["https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"],
+      "tags": ["github", "secrets", "oauth"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.stripe-secret-key-live",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Stripe Live Secret Key",
+    "description": "Stripe live secret key found. This grants full access to the Stripe account.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/sk_live_[a-zA-Z0-9]{24,}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Stripe LIVE secret key found in code - critical exposure",
+      "requiredProof": "Remove from code, rotate in Stripe dashboard immediately",
+      "references": ["https://stripe.com/docs/keys"],
+      "tags": ["stripe", "secrets", "payment", "critical"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.stripe-secret-key-test",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Stripe Test Secret Key",
+    "description": "Stripe test secret key found. Should still be env var.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/sk_test_[a-zA-Z0-9]{24,}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme", ".env"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Stripe test secret key found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://stripe.com/docs/keys"],
+      "tags": ["stripe", "secrets", "payment"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.private-key-rsa",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "RSA Private Key",
+    "description": "RSA private key found in code.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.go", "**/*.java", "**/*.rb", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/-----BEGIN RSA PRIVATE KEY-----/", "not": ["example", "sample", "test"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "RSA private key found in source code",
+      "requiredProof": "Remove from code, store in secrets manager",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html"],
+      "tags": ["secrets", "cryptography", "private-key"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.private-key-generic",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Private Key (Generic)",
+    "description": "Generic private key found in code.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.go", "**/*.java", "**/*.rb", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/-----BEGIN PRIVATE KEY-----/", "not": ["example", "sample", "test"] },
+        { "pattern": "/-----BEGIN EC PRIVATE KEY-----/", "not": ["example", "sample", "test"] },
+        { "pattern": "/-----BEGIN DSA PRIVATE KEY-----/", "not": ["example", "sample", "test"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Private key found in source code",
+      "requiredProof": "Remove from code, store in secrets manager",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html"],
+      "tags": ["secrets", "cryptography", "private-key"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.google-api-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Google API Key",
+    "description": "Google API key found (AIza prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/AIza[0-9A-Za-z_-]{35}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Google API key found in code",
+      "requiredProof": "Move to environment variable, restrict key in Google Cloud Console",
+      "references": ["https://cloud.google.com/docs/authentication/api-keys"],
+      "tags": ["google", "gcp", "secrets", "api-key"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.gcp-service-account",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "GCP Service Account Key",
+    "description": "GCP service account private key found in code.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.json", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/\"private_key\":\\s*\"-----BEGIN PRIVATE KEY-----/", "not": ["example", "sample"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "GCP service account key found in code",
+      "requiredProof": "Use Workload Identity or store in Secret Manager",
+      "references": ["https://cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys"],
+      "tags": ["gcp", "secrets", "service-account"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.database-url-with-password",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Database URL with Password",
+    "description": "Database connection string with embedded password.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.go", "**/*.java", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/postgres(ql)?:\\/\\/[^:]+:[^@]+@[^/]+/", "not": ["process.env", "DATABASE_URL", "localhost", "127.0.0.1", "password"] },
+        { "pattern": "/mysql:\\/\\/[^:]+:[^@]+@[^/]+/", "not": ["process.env", "DATABASE_URL", "localhost", "127.0.0.1", "password"] },
+        { "pattern": "/mongodb(\\+srv)?:\\/\\/[^:]+:[^@]+@[^/]+/", "not": ["process.env", "MONGODB_URI", "localhost", "127.0.0.1"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Database connection string with password found in code",
+      "requiredProof": "Move to environment variable or secrets manager",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Database_Security_Cheat_Sheet.html"],
+      "tags": ["database", "secrets", "connection-string"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.slack-webhook-url",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Slack Webhook URL",
+    "description": "Slack incoming webhook URL found.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/https:\\/\\/hooks\\.slack\\.com\\/services\\/T[A-Z0-9]+\\/B[A-Z0-9]+\\/[a-zA-Z0-9]+/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Slack webhook URL found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://api.slack.com/messaging/webhooks"],
+      "tags": ["slack", "secrets", "webhook"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.slack-bot-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Slack Bot Token",
+    "description": "Slack bot/user token found (xoxb-/xoxp- prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/xoxb-[0-9]+-[0-9]+-[a-zA-Z0-9]+/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] },
+        { "pattern": "/xoxp-[0-9]+-[0-9]+-[0-9]+-[a-f0-9]+/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Slack token found in code",
+      "requiredProof": "Remove and rotate in Slack app settings",
+      "references": ["https://api.slack.com/authentication/token-types"],
+      "tags": ["slack", "secrets", "token"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.sendgrid-api-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "SendGrid API Key",
+    "description": "SendGrid API key found (SG. prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/SG\\.[a-zA-Z0-9_-]{22}\\.[a-zA-Z0-9_-]{43}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "SendGrid API key found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://docs.sendgrid.com/ui/account-and-settings/api-keys"],
+      "tags": ["sendgrid", "secrets", "email"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.twilio-account-sid",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Twilio Account SID",
+    "description": "Twilio account SID found (AC prefix, 32 chars).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/AC[a-f0-9]{32}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Twilio Account SID found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://www.twilio.com/docs/iam/keys/api-key"],
+      "tags": ["twilio", "secrets"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.twilio-auth-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Twilio Auth Token",
+    "description": "Twilio auth token found.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/TWILIO_AUTH_TOKEN\\s*[=:]\\s*[\"'][a-f0-9]{32}[\"']/", "not": ["process.env"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Twilio Auth Token found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://www.twilio.com/docs/iam/keys/api-key"],
+      "tags": ["twilio", "secrets", "auth-token"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.npm-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "NPM Access Token",
+    "description": "NPM access token found (npm_ prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/node_modules/**", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/npm_[a-zA-Z0-9]{36}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "NPM access token found in code",
+      "requiredProof": "Remove and rotate token in npm settings",
+      "references": ["https://docs.npmjs.com/creating-and-viewing-access-tokens"],
+      "tags": ["npm", "secrets", "token", "supply-chain"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.pypi-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "PyPI API Token",
+    "description": "PyPI API token found (pypi- prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/pypi-[A-Za-z0-9_-]{32,}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "PyPI API token found in code",
+      "requiredProof": "Remove and rotate token in PyPI settings",
+      "references": ["https://pypi.org/help/#apitoken"],
+      "tags": ["pypi", "python", "secrets", "token", "supply-chain"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.firebase-admin-sdk",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Firebase Admin SDK Credentials",
+    "description": "Firebase Admin SDK service account credentials found.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.json", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/\"type\":\\s*\"service_account\"/", "not": ["example", "sample"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Firebase Admin SDK credentials found in code",
+      "requiredProof": "Use environment variables or Secret Manager",
+      "references": ["https://firebase.google.com/docs/admin/setup"],
+      "tags": ["firebase", "secrets", "google"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.mailchimp-api-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Mailchimp API Key",
+    "description": "Mailchimp API key found (ends with -us## datacenter).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/[a-f0-9]{32}-us[0-9]{1,2}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Mailchimp API key found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://mailchimp.com/developer/marketing/guides/quick-start/"],
+      "tags": ["mailchimp", "secrets", "email"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.mailgun-api-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Mailgun API Key",
+    "description": "Mailgun API key found (key- prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/key-[a-f0-9]{32}/",
+          "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"],
+          "requiresNearby": { "any": ["mailgun", "Mailgun", "MAILGUN"], "within": 10 }
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Mailgun API key found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://documentation.mailgun.com/en/latest/api-intro.html"],
+      "tags": ["mailgun", "secrets", "email"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.discord-bot-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Discord Bot Token",
+    "description": "Discord bot token found.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/[MN][A-Za-z\\d]{23,}\\.[\\w-]{6}\\.[\\w-]{27}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Discord bot token found in code",
+      "requiredProof": "Move to environment variable, regenerate token",
+      "references": ["https://discord.com/developers/docs/topics/oauth2"],
+      "tags": ["discord", "secrets", "bot"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.discord-webhook-url",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Discord Webhook URL",
+    "description": "Discord webhook URL found.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/https:\\/\\/discord(app)?\\.com\\/api\\/webhooks\\/[0-9]+\\/[A-Za-z0-9_-]+/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Discord webhook URL found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://discord.com/developers/docs/resources/webhook"],
+      "tags": ["discord", "secrets", "webhook"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.datadog-api-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Datadog API Key",
+    "description": "Datadog API key found.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/DD_API_KEY\\s*[=:]\\s*[\"'][a-f0-9]{32}[\"']/", "not": ["process.env"] },
+        { "pattern": "/DATADOG_API_KEY\\s*[=:]\\s*[\"'][a-f0-9]{32}[\"']/", "not": ["process.env"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Datadog API key found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://docs.datadoghq.com/account_management/api-app-keys/"],
+      "tags": ["datadog", "secrets", "observability"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.openai-api-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "OpenAI API Key",
+    "description": "OpenAI API key found (sk- prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/sk-[a-zA-Z0-9]{48}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] },
+        { "pattern": "/sk-proj-[a-zA-Z0-9_-]{48,}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "OpenAI API key found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://platform.openai.com/docs/api-reference/authentication"],
+      "tags": ["openai", "ai", "secrets", "api-key"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.anthropic-api-key",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Anthropic API Key",
+    "description": "Anthropic API key found (sk-ant- prefix).",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/sk-ant-[a-zA-Z0-9_-]{32,}/", "not": ["process.env", "EXAMPLE", "TODO", "REPLACE", "YOUR_", "placeholder", "changeme"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Anthropic API key found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://docs.anthropic.com/claude/reference/getting-started-with-the-api"],
+      "tags": ["anthropic", "ai", "secrets", "api-key"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.vercel-token",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Vercel Token",
+    "description": "Vercel authentication token found.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/VERCEL_TOKEN\\s*[=:]\\s*[\"'][a-zA-Z0-9]{24}[\"']/", "not": ["process.env"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Vercel token found in code",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://vercel.com/docs/rest-api#authentication"],
+      "tags": ["vercel", "secrets", "deployment"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.jwt-secret-hardcoded",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "JWT Secret Hardcoded",
+    "description": "JWT secret hardcoded in source code.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/JWT_SECRET\\s*[=:]\\s*[\"'][^\"']{16,}[\"']/", "not": ["process.env", "example", "changeme", "secret"] },
+        { "pattern": "/jwtSecret\\s*[=:]\\s*[\"'][^\"']{16,}[\"']/", "not": ["process.env", "example"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "JWT secret appears to be hardcoded",
+      "requiredProof": "Move to environment variable",
+      "references": ["https://auth0.com/blog/a-look-at-the-latest-draft-for-jwt-bcp/"],
+      "tags": ["jwt", "secrets", "auth"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "secrets.encryption-key-hardcoded",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Encryption Key Hardcoded",
+    "description": "Encryption key hardcoded in source code.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.go", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/ENCRYPTION_KEY\\s*[=:]\\s*[\"'][a-fA-F0-9]{32,}[\"']/", "not": ["process.env", "example"] },
+        { "pattern": "/encryptionKey\\s*[=:]\\s*[\"'][a-fA-F0-9]{32,}[\"']/", "not": ["process.env", "example"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Encryption key appears to be hardcoded",
+      "requiredProof": "Move to environment variable or KMS",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html"],
+      "tags": ["encryption", "secrets", "cryptography"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+
+  {
+    "id": "xss.dangerously-set-inner-html",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.RESPONSE",
+    "name": "Unsanitized HTML Rendering",
+    "description": "User input rendered without sanitization via dangerouslySetInnerHTML, innerHTML, or v-html.",
+    "applicability": {
+      "frameworks": ["react", "nextjs", "vue"],
+      "filePatterns": ["**/*.tsx", "**/*.jsx", "**/*.vue", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/dangerouslySetInnerHTML|innerHTML|v-html/", "not": ["sanitize", "DOMPurify", "escape", "trusted"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "User input may be rendered unsanitized (XSS risk)",
+      "requiredProof": "Sanitize HTML with DOMPurify before rendering",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html"],
+      "tags": ["xss", "html", "input"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "sqli.raw-query",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.SQL_QUERY",
+    "name": "Raw SQL with String Interpolation",
+    "description": "SQL query constructed with string interpolation or concatenation.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.go", "**/*.java", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/\\$queryRaw`|\\$executeRaw`/", "not": ["Prisma.sql", "Prisma.join", "Prisma.raw"] },
+        { "pattern": "/query\\(.*\\$\\{|execute\\(.*\\$\\{/", "not": ["parameterized", "prepared", "placeholder", "\\?"] },
+        { "pattern": "/\\.raw\\(.*\\+|raw\\(.*\\$\\{/", "not": ["parameterized", "prepared"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "SQL query uses string interpolation — potential SQL injection",
+      "requiredProof": "Use parameterized queries or tagged template literals (Prisma.sql)",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html"],
+      "tags": ["sql", "injection", "database"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "cmdi.exec-user-input",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.COMMAND_EXEC",
+    "name": "Command Execution with User Input",
+    "description": "exec/spawn/execSync called with potentially user-controlled input.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/exec\\(.*\\$\\{|exec\\(.*req\\.|exec\\(.*params/", "not": ["escape", "sanitize", "allowlist", "whitelist"] },
+        { "pattern": "/execSync\\(.*\\$\\{|execSync\\(.*req\\.|execSync\\(.*params/", "not": ["escape", "sanitize", "allowlist", "whitelist"] },
+        { "pattern": "/spawn\\(.*\\$\\{|spawn\\(.*req\\.|spawn\\(.*params/", "not": ["escape", "sanitize", "allowlist", "whitelist"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "Command execution with potentially user-controlled input",
+      "requiredProof": "Use parameterized commands (spawn with array args) or strict input validation",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html"],
+      "tags": ["command-injection", "exec", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "cmdi.eval-usage",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.COMMAND_EXEC",
+    "name": "eval() Usage",
+    "description": "eval() executes arbitrary code. Extremely dangerous with any external input.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/\\beval\\s*\\(/", "not": ["// eslint-disable", "JSON.parse"] },
+        { "pattern": "/new Function\\s*\\(/", "not": ["// eslint-disable"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "eval() or new Function() used — potential code injection",
+      "requiredProof": "Replace with safer alternatives (JSON.parse, structured data)",
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!"],
+      "tags": ["eval", "code-injection", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "path.traversal.user-input",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.FILE_ACCESS",
+    "name": "Path Traversal with User Input",
+    "description": "File operations with user-controlled paths allow reading arbitrary files.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/readFile.*req\\.|readFileSync.*req\\.|readFile.*params/", "not": ["path.resolve", "path.normalize", "startsWith", "sanitize"] },
+        { "pattern": "/createReadStream.*req\\.|createReadStream.*params/", "not": ["path.resolve", "sanitize"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "File path from user input may allow path traversal",
+      "requiredProof": "Validate path is within allowed directory using path.resolve",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Path_Traversal_Cheat_Sheet.html"],
+      "tags": ["path", "traversal", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "ssrf.fetch-user-input",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.RESPONSE",
+    "name": "SSRF via User-Controlled URL",
+    "description": "fetch/redirect called with user-provided URL without validation.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/fetch\\(.*req|redirect\\(.*req|new URL\\(.*req/", "not": ["URL.canParse", "isValidUrl", "allowlist", "validateUrl"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "User-provided URL not validated (SSRF risk)",
+      "requiredProof": "Validate URLs against allowlist",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html"],
+      "tags": ["ssrf", "url", "input"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "crypto.weak-des",
+    "version": "1.0.0",
+    "invariantId": "CRYPTO.ALGORITHM.STRONG",
+    "name": "Weak Encryption Algorithm DES",
+    "description": "DES encryption is cryptographically broken.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/createCipheriv\\(['\"]des/" },
+        { "pattern": "/createDecipher\\(['\"]des/" }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "DES encryption is weak — use AES-256-GCM instead",
+      "requiredProof": "Use AES-256-GCM instead of DES",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"],
+      "tags": ["crypto", "des", "weak"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "crypto.weak-rc4",
+    "version": "1.0.0",
+    "invariantId": "CRYPTO.ALGORITHM.STRONG",
+    "name": "Weak Encryption Algorithm RC4",
+    "description": "RC4 encryption has known vulnerabilities.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/createCipheriv\\(['\"]rc4/" }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "RC4 encryption is weak — use AES-256-GCM instead",
+      "requiredProof": "Use AES-256-GCM instead of RC4",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html"],
+      "tags": ["crypto", "rc4", "weak"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "crypto.weak-md5",
+    "version": "1.0.0",
+    "invariantId": "CRYPTO.ALGORITHM.STRONG",
+    "name": "Weak Hash Algorithm MD5",
+    "description": "MD5 is cryptographically broken for security use.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.go", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/createHash\\(['\"]md5['\"]\\)/", "not": ["checksum", "etag", "cache", "fingerprint"] },
+        { "pattern": "/hashlib\\.md5/", "not": ["checksum", "etag", "cache"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "MD5 hash used — weak for security purposes",
+      "requiredProof": "Use SHA-256 or SHA-3 for security; MD5 is acceptable only for non-security checksums",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"],
+      "tags": ["crypto", "md5", "weak"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "crypto.weak-sha1",
+    "version": "1.0.0",
+    "invariantId": "CRYPTO.ALGORITHM.STRONG",
+    "name": "Weak Hash Algorithm SHA1",
+    "description": "SHA1 has known collision attacks and should not be used for security.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "**/*.py", "**/*.go", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/createHash\\(['\"]sha1['\"]\\)/", "not": ["checksum", "etag", "cache", "git"] },
+        { "pattern": "/hashlib\\.sha1/", "not": ["checksum", "etag", "cache"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "SHA1 hash used — weak for security purposes",
+      "requiredProof": "Use SHA-256 or SHA-3 for security",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"],
+      "tags": ["crypto", "sha1", "weak"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "crypto.hardcoded-iv",
+    "version": "1.0.0",
+    "invariantId": "CRYPTO.ALGORITHM.STRONG",
+    "name": "Hardcoded Initialization Vector",
+    "description": "IVs must be random, not hardcoded.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/iv\\s*[=:]\\s*[\"'][0-9a-fA-F]+[\"']|iv:\\s*Buffer\\.from\\s*\\([\"']/", "not": ["randomBytes", "random", "generate"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Hardcoded IV detected — use random IV per encryption",
+      "requiredProof": "Generate random IV with crypto.randomBytes()",
+      "references": ["https://nodejs.org/api/crypto.html"],
+      "tags": ["crypto", "iv", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "crypto.math-random-security",
+    "version": "1.0.0",
+    "invariantId": "CRYPTO.ALGORITHM.STRONG",
+    "name": "Math.random Used for Security",
+    "description": "Math.random is not cryptographically secure.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/Math\\.random\\s*\\(/",
+          "requiresNearby": { "any": ["token", "secret", "password", "key", "session", "nonce", "csrf"], "within": 5 }
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Math.random is not cryptographically secure for token/key generation",
+      "requiredProof": "Use crypto.randomBytes or crypto.randomUUID for security",
+      "references": ["https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues"],
+      "tags": ["crypto", "random", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "cookie.no-httponly",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.RESPONSE",
+    "name": "Cookie Missing HttpOnly Flag",
+    "description": "Session cookies should have HttpOnly flag to prevent XSS theft.",
+    "applicability": {
+      "frameworks": ["express", "nextjs", "node"],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/setCookie|cookie\\s*\\(|set-cookie/i",
+          "not": ["httpOnly", "HttpOnly", "http_only"],
+          "requiresNearby": { "any": ["session", "token", "auth"], "within": 20 }
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Cookie may be missing HttpOnly flag",
+      "requiredProof": "Set httpOnly: true for session cookies",
+      "references": ["https://owasp.org/www-community/HttpOnly"],
+      "tags": ["cookie", "session", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "cors.wildcard-origin",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.RESPONSE",
+    "name": "CORS Wildcard Origin",
+    "description": "CORS with * origin allows any site to make requests.",
+    "applicability": {
+      "frameworks": ["express", "nextjs", "node"],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/Access-Control-Allow-Origin.*\\*|cors.*origin:\\s*[\"']\\*[\"']/" }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "CORS wildcard origin allows any site to make requests",
+      "requiredProof": "Restrict CORS origin to known domains",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Cross-Origin_Resource_Sharing_Cheat_Sheet.html"],
+      "tags": ["cors", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "session.weak-secret",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Session Secret Too Weak",
+    "description": "Session secrets should be long, random strings from environment.",
+    "applicability": {
+      "frameworks": ["express", "node"],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/session.*secret\\s*[=:]\\s*[\"'][^\"']{1,20}[\"']/", "not": ["process.env", "import.meta.env"] },
+        { "pattern": "/cookieParser\\s*\\(['\"][^'\"]{1,20}['\"]\\)/", "not": ["process.env"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Session secret appears to be weak or hardcoded",
+      "requiredProof": "Use long random secret from environment variable",
+      "references": ["https://expressjs.com/en/resources/middleware/session.html"],
+      "tags": ["session", "secrets", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "filename.unsanitized",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.FILE_ACCESS",
+    "name": "Filename Not Sanitized",
+    "description": "User-provided filenames should be sanitized before use.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/req\\.file\\.originalname|body\\.filename|params\\.filename/", "not": ["sanitize", "path.basename", "normalize", "slugify"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Filename may not be sanitized — path traversal risk",
+      "requiredProof": "Sanitize user-provided filenames with path.basename or slugify",
+      "references": ["https://owasp.org/www-community/attacks/Path_Traversal"],
+      "tags": ["sanitize", "filename", "traversal"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "nextjs.server-action.unprotected",
+    "version": "1.0.0",
+    "invariantId": "AUTHZ.SERVICE_LAYER.ENFORCED",
+    "name": "Unprotected Next.js Server Action",
+    "description": "Server actions with 'use server' directive should verify authentication.",
+    "applicability": {
+      "frameworks": ["nextjs"],
+      "filePatterns": ["**/app/**/actions.ts", "**/app/**/actions/*.ts", "**/actions/**/*.ts", "**/*.ts", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/'use server'/",
+          "not": ["getServerSession", "auth()", "currentUser", "getSession", "requireAuth", "protect"],
+          "requiresNearby": { "any": ["export async function", "export const"], "within": 50 }
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Server action missing authentication check",
+      "requiredProof": "Add getServerSession() or auth() check before any mutations",
+      "references": ["https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations"],
+      "tags": ["nextjs", "authz", "server-actions"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "nextjs.env.exposed",
+    "version": "1.0.0",
+    "invariantId": "SECRETS.HARDCODED",
+    "name": "Server Environment Variable Exposed to Client",
+    "description": "Non-NEXT_PUBLIC_ environment variables should not be in client components.",
+    "applicability": {
+      "frameworks": ["nextjs"],
+      "filePatterns": ["**/*.tsx", "**/*.ts", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/process\\.env\\.(DATABASE|SECRET|API_KEY|STRIPE_SECRET)/",
+          "requiresNearby": { "any": ["use client"], "within": 5 }
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Server-only environment variable may be exposed to client",
+      "requiredProof": "Only access server env vars in server components/actions/API routes",
+      "references": ["https://nextjs.org/docs/app/building-your-application/configuring/environment-variables"],
+      "tags": ["nextjs", "security", "env"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "nosqli.mongo-injection",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.SQL_QUERY",
+    "name": "NoSQL Injection via Object Input",
+    "description": "MongoDB queries with unsanitized user input allow operator injection.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/\\.find\\(.*req\\.body|\\.findOne\\(.*req\\.body|\\.updateOne\\(.*req\\.body/", "not": ["sanitize", "validate", "schema", "zod", "joi"] },
+        { "pattern": "/\\$where.*req\\.|\\$regex.*req\\./", "not": ["sanitize", "escape"] }
+      ]
+    },
+    "finding": {
+      "severity": "P0",
+      "message": "MongoDB query with unsanitized user input — NoSQL injection risk",
+      "requiredProof": "Validate and sanitize input before MongoDB queries",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html"],
+      "tags": ["nosql", "injection", "mongodb"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "debug.console-log-sensitive",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.RESPONSE",
+    "name": "Sensitive Data in Console Log",
+    "description": "Logging sensitive data (passwords, tokens, keys) to console.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/console\\.log.*password|console\\.log.*secret|console\\.log.*token|console\\.log.*apiKey/i", "not": ["debug", "// ", "redact"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Sensitive data may be logged to console",
+      "requiredProof": "Remove sensitive data from logs or use structured logging with redaction",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html"],
+      "tags": ["logging", "debug", "sensitive-data"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "upload.no-type-validation",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.FILE_ACCESS",
+    "name": "File Upload Type Not Validated",
+    "description": "Uploaded file types should be validated.",
+    "applicability": {
+      "frameworks": ["express", "node"],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/multer|formidable/", "not": ["fileFilter", "mimetype", "file-type", "allowedTypes"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "File upload type not validated",
+      "requiredProof": "Validate file MIME type and extension",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html"],
+      "tags": ["upload", "file-type", "input"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "header.missing-csp",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.RESPONSE",
+    "name": "Missing Content-Security-Policy",
+    "description": "Content-Security-Policy header should be set to prevent XSS and data injection.",
+    "applicability": {
+      "frameworks": ["express", "nextjs", "node"],
+      "filePatterns": ["**/middleware.ts", "**/middleware.js", "**/server.ts", "**/server.js", "**/app.ts", "**/app.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/helmet|setHeader|headers/",
+          "not": ["Content-Security-Policy", "content-security-policy", "csp"],
+          "requiresNearby": { "any": ["express", "app.", "server."], "within": 20 }
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P2",
+      "message": "Content-Security-Policy header may not be set",
+      "requiredProof": "Set Content-Security-Policy header via helmet or manually",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html"],
+      "tags": ["headers", "csp", "xss"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "prototype.pollution",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.COMMAND_EXEC",
+    "name": "Prototype Pollution Risk",
+    "description": "Object merge/assign with user input may allow prototype pollution.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/Object\\.assign\\(.*req\\.body|\\.\\.\\.(req\\.body|req\\.query)/", "not": ["sanitize", "pick", "omit", "allowlist", "zod", "schema"] },
+        { "pattern": "/lodash\\.merge\\(.*req|deepMerge\\(.*req|_.merge\\(.*req/", "not": ["sanitize", "validate"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Object merge with user input may allow prototype pollution",
+      "requiredProof": "Use allowlist (pick/omit) instead of spreading user input directly",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Prototype_Pollution_Prevention_Cheat_Sheet.html"],
+      "tags": ["prototype-pollution", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "redirect.open-redirect",
+    "version": "1.0.0",
+    "invariantId": "DATAFLOW.UNTRUSTED.RESPONSE",
+    "name": "Open Redirect",
+    "description": "Redirect with user-controlled URL allows phishing attacks.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        { "pattern": "/redirect\\(.*req\\.query|redirect\\(.*searchParams|res\\.redirect\\(.*req/", "not": ["allowlist", "startsWith", "hostname", "validateUrl", "URL"] }
+      ]
+    },
+    "finding": {
+      "severity": "P1",
+      "message": "Redirect URL from user input — open redirect risk",
+      "requiredProof": "Validate redirect URL is same-origin or on allowlist",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html"],
+      "tags": ["redirect", "phishing", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  },
+  {
+    "id": "timing.non-constant-compare",
+    "version": "1.0.0",
+    "invariantId": "CRYPTO.ALGORITHM.STRONG",
+    "name": "Non-Constant-Time String Comparison",
+    "description": "Using === for secret comparison leaks timing information.",
+    "applicability": {
+      "frameworks": [],
+      "filePatterns": ["**/*.ts", "**/*.js", "!**/__tests__/**", "!**/*.test.*", "!**/*.spec.*", "!**/test/**", "!**/tests/**", "!**/__mocks__/**", "!**/fixtures/**"]
+    },
+    "detection": {
+      "codePatterns": [
+        {
+          "pattern": "/===.*secret|===.*token|===.*apiKey|===.*password/i",
+          "not": ["timingSafeEqual", "constantTimeCompare", "scrypt", "bcrypt", "argon"],
+          "requiresNearby": { "any": ["verify", "authenticate", "check", "compare", "validate"], "within": 5 }
+        }
+      ]
+    },
+    "finding": {
+      "severity": "P2",
+      "message": "Non-constant-time comparison for secrets — timing attack risk",
+      "requiredProof": "Use crypto.timingSafeEqual for secret comparison",
+      "references": ["https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"],
+      "tags": ["timing", "crypto", "security"]
+    },
+    "metadata": { "author": "SecurityChecks", "created": "2025-01-01T00:00:00Z" }
+  }
+]

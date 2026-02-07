@@ -1,0 +1,72 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Golden: WEBHOOK.IDEMPOTENT > Snapshot Stability > should match findings snapshot > webhook-findings 1`] = `
+[
+  {
+    "file": "comments-only.ts",
+    "hasRemediation": true,
+    "hasSuggestedTest": true,
+    "invariantId": "WEBHOOK.IDEMPOTENT",
+    "severity": "P0",
+  },
+  {
+    "file": "github-partial.ts",
+    "hasRemediation": true,
+    "hasSuggestedTest": true,
+    "invariantId": "WEBHOOK.IDEMPOTENT",
+    "severity": "P0",
+  },
+  {
+    "file": "stripe-broken.ts",
+    "hasRemediation": true,
+    "hasSuggestedTest": true,
+    "invariantId": "WEBHOOK.IDEMPOTENT",
+    "severity": "P0",
+  },
+]
+`;
+
+exports[`Golden: WEBHOOK.IDEMPOTENT > Snapshot Stability > should match webhook handlers snapshot > webhook-handlers 1`] = `
+[
+  {
+    "eventIdMethod": "none",
+    "file": "comments-only.ts",
+    "hasIdempotencyCheck": false,
+    "line": 15,
+    "persistenceType": "none",
+    "provider": "generic",
+  },
+  {
+    "eventIdMethod": "none",
+    "file": "github-partial.ts",
+    "hasIdempotencyCheck": false,
+    "line": 11,
+    "persistenceType": "none",
+    "provider": "slack",
+  },
+  {
+    "eventIdMethod": "header",
+    "file": "slack-untested.ts",
+    "hasIdempotencyCheck": true,
+    "line": 15,
+    "persistenceType": "database",
+    "provider": "slack",
+  },
+  {
+    "eventIdMethod": "none",
+    "file": "stripe-broken.ts",
+    "hasIdempotencyCheck": false,
+    "line": 12,
+    "persistenceType": "none",
+    "provider": "stripe",
+  },
+  {
+    "eventIdMethod": "svix_id",
+    "file": "svix-complete.ts",
+    "hasIdempotencyCheck": true,
+    "line": 18,
+    "persistenceType": "database",
+    "provider": "svix",
+  },
+]
+`;

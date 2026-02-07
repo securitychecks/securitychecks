@@ -1,0 +1,52 @@
+// Multi-tenant Prisma schema WITHOUT RLS policies
+// This should trigger AUTHZ.RLS.MULTI_TENANT finding
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  projects  Project[]
+  members   Member[]
+}
+
+model Project {
+  id             String   @id @default(cuid())
+  name           String
+  organizationId String   // <-- Multi-tenant column
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  tasks          Task[]
+
+  @@index([organizationId])
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  title     String
+  completed Boolean  @default(false)
+  projectId String
+
+  project   Project  @relation(fields: [projectId], references: [id])
+}
+
+model Member {
+  id             String   @id @default(cuid())
+  email          String
+  role           String   @default("member")
+  organizationId String   // <-- Multi-tenant column
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([email, organizationId])
+  @@index([organizationId])
+}

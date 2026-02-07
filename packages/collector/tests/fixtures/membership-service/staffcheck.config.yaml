@@ -1,0 +1,7 @@
+version: "1.0"
+include:
+  - "**/*.ts"
+exclude:
+  - "**/node_modules/**"
+servicePatterns:
+  - "**/*-service.ts"

@@ -1,0 +1,75 @@
+{
+  "name": "@securitychecks/collector",
+  "version": "0.1.0",
+  "description": "Code artifact collector for SecurityChecks - extracts facts from codebases",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "SecurityChecks <hello@securitychecks.ai>",
+  "homepage": "https://securitychecks.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/securitychecks/securitychecks.ai"
+  },
+  "keywords": [
+    "securitychecks",
+    "scc",
+    "collector",
+    "code-analysis",
+    "static-analysis",
+    "artifact-extraction",
+    "typescript",
+    "security",
+    "ast",
+    "ts-morph"
+  ],
+  "bin": {
+    "scc": "./dist/cli.js"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./schema": {
+      "import": "./dist/collector-artifact.schema.json",
+      "require": "./dist/collector-artifact.schema.json"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && pnpm generate:schema",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "generate:schema": "npx tsx scripts/generate-schema.ts",
+    "test": "vitest run",
+    "test:firewall": "vitest run tests/policy-firewall.test.ts"
+  },
+  "dependencies": {
+    "commander": "^14.0.2",
+    "glob": "^13.0.0",
+    "picocolors": "^1.1.1",
+    "ts-morph": "^27.0.2",
+    "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.1.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-json-schema": "^0.67.1",
+    "vitest": "^4.0.18"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

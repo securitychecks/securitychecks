@@ -1,0 +1,68 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Golden: TRANSACTION.POST_COMMIT.SIDE_EFFECTS > Snapshot Stability > should match findings snapshot > transaction-findings 1`] = `
+[
+  {
+    "file": "broken-email-in-tx.ts",
+    "hasRemediation": true,
+    "hasSuggestedTest": true,
+    "invariantId": "TRANSACTION.POST_COMMIT.SIDE_EFFECTS",
+    "messageType": "side_effect",
+    "severity": "P0",
+  },
+  {
+    "file": "broken-webhook-in-tx.ts",
+    "hasRemediation": true,
+    "hasSuggestedTest": true,
+    "invariantId": "TRANSACTION.POST_COMMIT.SIDE_EFFECTS",
+    "messageType": "side_effect",
+    "severity": "P0",
+  },
+]
+`;
+
+exports[`Golden: TRANSACTION.POST_COMMIT.SIDE_EFFECTS > Snapshot Stability > should match transaction scopes snapshot > transaction-scopes 1`] = `
+[
+  {
+    "containsSideEffects": true,
+    "file": "broken-email-in-tx.ts",
+    "functionName": "createOrderWithEmail",
+    "line": 21,
+    "sideEffectTypes": [
+      "email",
+    ],
+  },
+  {
+    "containsSideEffects": true,
+    "file": "broken-webhook-in-tx.ts",
+    "functionName": "processPaymentWithWebhook",
+    "line": 21,
+    "sideEffectTypes": [
+      "external_api",
+    ],
+  },
+  {
+    "containsSideEffects": false,
+    "file": "complete-outbox.ts",
+    "functionName": "createOrderWithOutbox",
+    "line": 20,
+    "sideEffectTypes": [],
+  },
+  {
+    "containsSideEffects": false,
+    "file": "correct-post-commit.ts",
+    "functionName": "createOrderCorrectly",
+    "line": 22,
+    "sideEffectTypes": [],
+  },
+  {
+    "containsSideEffects": true,
+    "file": "partial-analytics-in-tx.ts",
+    "functionName": "createUserWithAnalytics",
+    "line": 21,
+    "sideEffectTypes": [
+      "analytics",
+    ],
+  },
+]
+`;

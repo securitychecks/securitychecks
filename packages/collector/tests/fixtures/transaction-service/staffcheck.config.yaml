@@ -1,0 +1,7 @@
+# Test fixture config
+include:
+  - "**/*.ts"
+exclude:
+  - "node_modules/**"
+servicePatterns:
+  - "**/*.ts"

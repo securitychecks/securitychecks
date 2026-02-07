@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Snapshot Stability > should generate stable IDs (regression test) > stable-finding-ids 1`] = `
+{
+  "membership": "AUTHZ.MEMBERSHIP.REVOCATION.IMMEDIATE:d8ad58412dd7",
+  "transaction": "TRANSACTION.POST_COMMIT.SIDE_EFFECTS:f4b2d2cdb065",
+  "webhook": "WEBHOOK.IDEMPOTENT:7d22bf2a3156",
+}
+`;
