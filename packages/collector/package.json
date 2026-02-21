@@ -40,7 +40,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "../LICENSE"
   ],
   "scripts": {
     "build": "tsup && pnpm generate:schema",

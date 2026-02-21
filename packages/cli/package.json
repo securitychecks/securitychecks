@@ -37,7 +37,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "../LICENSE"
   ],
   "scripts": {
     "build": "tsup",

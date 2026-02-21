@@ -261,4 +261,4 @@ Get your API key at [securitychecks.ai](https://securitychecks.ai).
 
 ## License
 
-Apache-2.0. See [LICENSE](../../LICENSE) for details.
+Apache-2.0. See [LICENSE](../LICENSE) for details.
