@@ -84,6 +84,48 @@ scheck explain AUTHZ.SERVICE_LAYER
 scheck explain WEBHOOK.IDEMPOTENT
 ```
 
+### `scheck list-invariants`
+
+List all supported invariants (optionally filtered).
+
+```bash
+# Human-readable list
+scheck list-invariants
+
+# Filter by severity/category
+scheck list-invariants --severity P0
+scheck list-invariants --category webhooks
+
+# JSON for scripting
+scheck list-invariants --json
+```
+
+### `scheck generate-test <invariantId>`
+
+Generate a test skeleton that proves an invariant is enforced.
+
+```bash
+scheck generate-test WEBHOOK.IDEMPOTENT
+scheck generate-test AUTHZ.SERVICE_LAYER.ENFORCED --framework jest
+```
+
+### `scheck preflight`
+
+Quick deployment readiness check — a curated subset of invariants focused on "is this safe to ship?"
+
+```bash
+# Interactive checklist
+scheck preflight
+
+# JSON output for CI gates
+scheck preflight --json
+
+# Check specific path
+scheck preflight --path ./src
+```
+
+Returns a readiness score (0-100) and pass/fail for each check.
+
 ### `scheck baseline`
 
 Manage known issues so you can adopt incrementally.
@@ -122,6 +164,29 @@ scheck init
 scheck init --hooks
 ```
 
+### `scheck waiver`
+
+View and manage temporary waivers.
+
+```bash
+# Show all active waivers
+scheck waiver --show
+
+# Show waivers expiring within 7 days
+scheck waiver --expiring
+
+# Remove expired waivers
+scheck waiver --prune
+```
+
+### `scheck feedback <invariantId>`
+
+Report whether a finding was a true positive or false positive.
+
+```bash
+scheck feedback WEBHOOK.IDEMPOTENT --verdict fp --reason not_applicable
+```
+
 ## Cloud Features (Optional)
 
 Connect to SecurityChecks cloud for dashboards, team collaboration, and CI integration.
@@ -135,6 +200,31 @@ export SECURITYCHECKS_API_KEY=sk_xxx
 
 # Sync findings to dashboard
 scheck sync --project my-project
+
+# Check login status
+scheck login --check
+
+# Log out
+scheck logout
+```
+
+### `scheck config`
+
+Manage cloud configuration.
+
+```bash
+# Show current config
+scheck config --show
+
+# Set default project
+scheck config --project my-project
+
+# Enable/disable cloud mode
+scheck config --cloud-enabled
+scheck config --no-cloud-enabled
+
+# Clear all config
+scheck config --clear
 ```
 
 Get your API key at [securitychecks.ai](https://securitychecks.ai).
@@ -167,7 +257,7 @@ Get your API key at [securitychecks.ai](https://securitychecks.ai).
 
 - [Documentation](https://securitychecks.ai/docs)
 - [Invariant Reference](https://securitychecks.ai/docs/invariants)
-- [GitHub](https://github.com/securitychecks/securitychecks.ai)
+- [GitHub](https://github.com/securitychecks/securitychecks)
 
 ## License
 
