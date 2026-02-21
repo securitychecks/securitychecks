@@ -128,4 +128,4 @@ No source code leaves your machine. We extract structural facts only:
 
 ## License
 
-Apache-2.0
+Apache-2.0. See [LICENSE](../LICENSE) for details.
