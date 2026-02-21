@@ -1,6 +1,6 @@
 {
   "name": "@securitychecks/cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "SecurityChecks CLI - Enforce backend invariants in your codebase",
   "type": "module",
   "license": "Apache-2.0",
@@ -8,7 +8,7 @@
   "homepage": "https://securitychecks.ai",
   "repository": {
     "type": "git",
-    "url": "https://github.com/securitychecks/securitychecks.ai"
+    "url": "https://github.com/securitychecks/securitychecks"
   },
   "keywords": [
     "securitychecks",
